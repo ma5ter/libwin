@@ -1,3 +1,4 @@
+DO YOU REALLY NEED GSTREAMER???
 GET BINARY
 https://gstreamer.freedesktop.org/download/#windows
 msiexec /a gstreamer-1.0-devel-msvc-x86_64-1.16.2.msi /qb TARGETDIR=r:\install

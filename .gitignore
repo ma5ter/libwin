@@ -1,3 +1,6 @@
-GStreamer/install/
-OpenCV/install/
-PugiXML/install/
+*/build/
+*/install/
+*/install.old/
+*/build.log
+*/lib.lst
+*/libd.lst
