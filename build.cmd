@@ -17,6 +17,12 @@ rem === RUN ===
 if [%1] == [] (
 	call :err No git URL was passed as a first parameter
 )
+
+cmake >nul 2>&1
+if not %errorlevel% == 0 (
+	call :err cmake not found in path
+)
+
 set MY_GIT_URL="%~1"
 set MY_SRC_DIR="%~n1"
 shift
@@ -48,12 +54,9 @@ if [%1] == [] (
 ) else if [%1] == [update] (
 	call :log Requested an update from %MY_GIT_URL%
 	if exist %MY_SRC_DIR% (
-		call :exe cd %MY_SRC_DIR%
-		call :exe git pull
-		call :exe git checkout master
-		call :exe cd ..
+		call :checkout %MY_SRC_DIR% master
 	) else (
-		git clone --depth 1 %MY_GIT_URL%
+		call :clone %MY_GIT_URL%
 	)
 ) else (
 	call :err unknown run option '%~1'
@@ -61,6 +64,10 @@ if [%1] == [] (
 shift
 goto paremeters_parse_begin
 :paremeters_parse_end
+
+if not exist %MY_SRC_DIR% (
+	call :clone %MY_GIT_URL%
+)
 
 if not [%DEPENDS_ON%] == [] (
 	setlocal enabledelayedexpansion
@@ -169,4 +176,15 @@ if exist %~1 (
 )
 exit /b 0
 
+:clone
+	call :log Cloning project ...
+	call :exe git clone --depth 1 %1
+exit /b 0
 
+:checkout
+	call :log Checking project out ...
+	call :exe pushd %1
+	call :exe git pull
+	call :exe git checkout %2
+	popd
+exit /b 0
