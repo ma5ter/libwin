@@ -31,6 +31,10 @@ shift
 set MY_PDB_DIR=%~1
 shift
 
+if [%BRANCH%] == [] (
+	set BRANCH=master
+)
+
 call :log Building %MY_SRC_DIR%
 
 :paremeters_parse_begin
@@ -53,10 +57,10 @@ if [%1] == [] (
 	call :rmrf build
 ) else if [%1] == [update] (
 	call :log Requested an update from %MY_GIT_URL%
-	if exist %MY_SRC_DIR% (
-		call :checkout %MY_SRC_DIR% master
+	if not exist %MY_SRC_DIR% (
+		call :clone %MY_GIT_URL% %BRANCH%
 	) else (
-		call :clone %MY_GIT_URL%
+		call :checkout %MY_SRC_DIR%
 	)
 ) else (
 	call :err unknown run option '%~1'
@@ -66,7 +70,7 @@ goto paremeters_parse_begin
 :paremeters_parse_end
 
 if not exist %MY_SRC_DIR% (
-	call :clone %MY_GIT_URL%
+	call :clone %MY_GIT_URL% %BRANCH%
 )
 
 if not [%DEPENDS_ON%] == [] (
@@ -178,13 +182,13 @@ exit /b 0
 
 :clone
 	call :log Cloning project ...
-	call :exe git clone --depth 1 %1
+	call :exe git clone --depth 1 -b %2 %1
 exit /b 0
 
 :checkout
 	call :log Checking project out ...
-	call :exe pushd %1
+ 	call :exe pushd %1
 	call :exe git pull
-	call :exe git checkout %2
-	popd
+	call :exe git checkout %1
+ 	popd
 exit /b 0
