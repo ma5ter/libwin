@@ -91,6 +91,9 @@ if exist install (
 	call :exe move install install.old 1>nul 2>&1
 )
 
+mkdir install 2>nul
+mkdir install\lib64 2>nul
+
 if not exist build (
 	call :log This is a CLEAN build
 	call :exe mkdir build
