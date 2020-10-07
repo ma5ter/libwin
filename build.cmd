@@ -162,7 +162,7 @@ exit /b 0
 :err
 call :log ERROR: %*
 rem return immediately
-goto eof
+goto :eof
 
 :exe
 call :log Executing '%*' ...
