@@ -1,0 +1,1 @@
+precompiled windows binaries here: https://github.com/AlexeyAB/darknet/releases/tag/darknet_yolo_v3
