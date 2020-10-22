@@ -92,7 +92,7 @@ if exist install (
 )
 
 mkdir install 2>nul
-mkdir install\lib64 2>nul
+mkdir install\lib 2>nul
 
 if not exist build (
 	call :log This is a CLEAN build
